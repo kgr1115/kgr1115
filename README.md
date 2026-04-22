@@ -34,4 +34,20 @@ The hot skill in 2026 isn't "I can hand-implement isotonic calibration" — a se
 
 ## Background
 
-- **Clubessential** — Level 2 Website Support Specialist · Oct 2021 – Jan 2026 · SaaS support across websites, reservation systems, CRM, and mobile apps. Salesforce ticket
+- **Clubessential** — Level 2 Website Support Specialist · Oct 2021 – Jan 2026 · SaaS support across websites, reservation systems, CRM, and mobile apps. Salesforce ticketing. Level 2 escalation point; collaborated with dev on root cause; client training.
+- **Fidelity Investments** — Customer Relationship Advocate · Apr 2019 – Sep 2020 · Earned FINRA Series 7 & 63 (expired).
+- **Total Quality Logistics** — Logistics Account Executive · Oct 2017 – Mar 2019 · 75+ outbound calls/day, sales targets.
+- **Western Governors University** — BS IT, currently enrolled.
+- **Active certs:** CompTIA Security+ · ITIL 4 Foundations.
+
+---
+
+## Tech I work in
+
+Python · FastAPI · Pydantic · React · TypeScript · Tailwind · SQLite · Salesforce · HTML / CSS · Anthropic · OpenAI · Google Gemini · Groq · pytest
+
+---
+
+## Contact
+
+[kyle.g.rauch@gmail.com](mailto:kyle.g.rauch@gmail.com) · [LinkedIn](https://www.linkedin.com/in/kyle-rauch-b2984a75/) · 513-609-7268 · Batavia, OH 45103
