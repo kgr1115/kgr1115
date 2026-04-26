@@ -8,32 +8,36 @@
 
 ## Featured projects
 
+### [csm-account-pulse](https://github.com/kgr1115/csm-account-pulse) — CSM account-health dashboard with documented v1→v5 prompt iteration
+
+Single-page Streamlit dashboard a CSM opens every Monday: per-account 0–100 health score (usage decay + ticket pressure + NPS) and a 3-bullet "what to focus on this week" briefing per account, every bullet citation-grounded to a specific fixture field. `DataSource` Protocol with `FixtureDataSource` as the only implementation — the README walks through the ~3–5 days of work to swap in Salesforce, plus a parallel `NotebookStore` Protocol for adding actioned-flags / notes. The interface boundary IS the architectural claim.
+
+The portfolio piece is `evals/` — five prompt versions (v1→v5), seven result files, a methodology rubric (script-checked citation validity, schema validity, bullet count, renewal-prose accuracy + hand-graded specificity, action-orientation), and visible failure-mode-then-fix cycles: v3 closed a months/years hallucination, v4 closed a 500-day day-count hallucination ("564 days" vs actual 64) by precomputing `days_to_renewal` and requiring verbatim copy, v5 closed a citation-grammar gap that the v4 run itself surfaced. Every prompt bump ships with its eval result file in the same window.
+
+31 tests defending specific failure modes. CI green.
+
+### [support-triage-public](https://github.com/kgr1115/support-triage-public) — Local-first AI triage workstation for B2B SaaS support
+
+Classify (priority / category / sentiment via Anthropic tool use, prompt-cached Haiku) → embed and retrieve top-k KB (sentence-transformers MiniLM-L6-v2 + FAISS flat-IP) → draft a citation-grounded reply (Sonnet 4.6, strict no-speculation prompt with `[KB-…]` inline citations) → suggest top-3 macros from a separate macro index. FastAPI `POST /triage` with classifier and drafter running in parallel via `asyncio.gather`. React + TypeScript workstation.
+
+The differentiator is the clean-room ragas faithfulness scorer in `app/faithfulness.py` — decomposes each draft into atomic claims and judges each one against ticket + KB, distinguishing "paraphrasing the customer's report" from "KB-grounded product fact" so customer-acknowledgment claims aren't penalized. Strict-vs-permissive baseline shows the strict prompt buys **+27.9pp faithfulness** isolated from model and retrieval.
+
+Honest baselines on 200 labeled synthetic tickets / 26 KB / 19 macros: category 95.0% (vs 20% random), priority 62.0% strict / **100% within-1-tier** (vs 40.5% modal), recall@3 95.8%, faithfulness 97.1%. Worst-offender analysis classifies drafter failure modes ("defining KB terms," "predicting workaround outcomes") with proposed prompt mitigations. 30 tests; CI green.
+
 ### [SiftRobust](https://github.com/kgr1115/SiftRobust) — Local-first AI inbox triage
 
-React + FastAPI UI, multi-provider LLM layer (Anthropic · OpenAI · Google · Groq), and a safety-gated bulk-action engine that can actually touch Gmail — not just summarize it. Built in ~2 weeks. Runs against a 40-thread synthetic fixture inbox out of the box, so you can see the pipeline end-to-end without OAuth setup.
+React + FastAPI UI, multi-provider LLM layer (Anthropic · OpenAI · Google · Groq), and a safety-gated bulk-action engine that can actually touch Gmail — not just summarize it. Eval harness scoring four providers on the same 40-fixture set: 97.5% top accuracy on Groq Llama 3.3 70B at ~10x lower cost per thread than Sonnet. Three safety gates in code: dry-run by default, confidence floor, safe-category whitelist.
 
-Includes an eval harness scoring four providers on the same 40-fixture set (97.5% top accuracy on Groq Llama 3.3 70B). The interesting design problem isn't "summarize email" — it's "how do you let AI safely touch production data?" Three gates in code: dry-run by default, confidence floor, safe-category whitelist.
-
-~4,400 lines Python + ~2,400 lines TypeScript.
-
-### [understudy](https://github.com/kgr1115/understudy) — Multi-agent job-search orchestrator
-
-Orchestrator + Scout/Tailor/Researcher subagents fanning out in parallel, a file-based contract that lets two completely different runtimes (Claude Code slash commands / Python over the Anthropic SDK) drive the same local dashboard, and a folder-watcher that rides along in a separate terminal auto-ingesting browser-dropped approval manifests in 2-4s. Status-bucket auto-reconciler keeps the spreadsheet, the dashboard, and the on-disk PDFs in sync without manual moves.
-
-The shape is the product: an idempotent ingester with a stamped dedupe key, a kanban with one-click ◀ Back / Next ▶ buttons that drop manifests into Downloads, and an LLM-driven onboarding that replaces a scripted wizard. I built this for myself while job-searching — the repo doubles as the demonstration.
-
-### [diamond-edge](https://github.com/kgr1115/diamond-edge) — MLB pick recommendation system · [live at diamond-edge.co](https://www.diamond-edge.co)
-
-Gradient-boosted models on real Statcast + odds data, an LLM rationale layer **grounded on SHAP attributions** (no free-form storytelling), and a calibrated probability output. ROI 22.97% on 2024 holdout for the promoted moneyline classifier. Architecture-keyword leakage ("LightGBM," "SHAP," "gradient boost") is scrubbed both in the prompt and post-response so end-users see clean rationale copy. Shipped as free + informational — no bets placed, no funds held.
-
-Built around four invariants the load path enforces in code: snapshot-pinned line tracking (the line at pick-creation time, not the latest live alternate), an isotonic calibrator wrapping the raw model output (ECE 0.065 → 0.0004 on run line), a refuse-to-promote retrain pipeline (variance-collapse + passthrough-trap guardrails — caught a real bug), and a "this migration hasn't been applied yet" clean-degrade banner so the admin telemetry page never crashes. Stripe checkout scaffolding for the planned paid tiers is preserved at tag `v0.1-paid-tiers`.
+The interesting design problem isn't "summarize email" — it's "how do you let AI safely touch production data?" ~4,400 lines Python + ~2,400 lines TypeScript.
 
 ---
 
 ## Other portfolio work
 
-- **[project-generator](https://github.com/kgr1115/project-generator)** — bootstrap-and-brief tool for Claude Code projects. Deep interview that scaffolds new repos (single or paired private/public) and writes a tailored `CLAUDE.md`, instead of leaving the placeholders most pipeline scaffolds ship with. Successor to [ai-pipeline-scaffold](https://github.com/kgr1115/ai-pipeline-scaffold) (archived) — agent profiles + skills are vendored in.
 - **[mlb-market-models](https://github.com/kgr1115/mlb-market-models)** — walk-forward backtest framework over MLB prediction markets. 14,531 gated picks · honest +/− ROI per market (Totals +1.43%, Moneyline −1.37%, Run Line −1.86% — losers published, not buried). Bayesian shrinkage, isotonic calibration (40-bin PAVA), fractional-Kelly sizing with correlated-leg deduplication. Research framework, not a product.
+- **[diamond-edge](https://github.com/kgr1115/diamond-edge)** — MLB pick recommendation system · [live at diamond-edge.co](https://www.diamond-edge.co). Gradient-boosted models on real Statcast + odds data, an LLM rationale layer grounded on SHAP attributions, isotonic-calibrated probability output (ECE 0.065 → 0.0004 on run line). Refuse-to-promote retrain pipeline with variance-collapse and passthrough-trap guardrails caught a real bug.
+- **[understudy](https://github.com/kgr1115/understudy)** — multi-agent job-search orchestrator. Orchestrator + Scout/Tailor/Researcher subagents fanning out in parallel, a file-based contract that lets two completely different runtimes (Claude Code slash commands / Python over the Anthropic SDK) drive the same local dashboard, and a folder-watcher auto-ingesting browser-dropped approval manifests in 2-4s. Built for my own job search — the repo doubles as the demonstration.
+- **[project-generator](https://github.com/kgr1115/project-generator)** — bootstrap-and-brief tool for Claude Code projects. Deep interview scaffolds new repos (single or paired private/public) and writes a tailored `CLAUDE.md`. Successor to [ai-pipeline-scaffold](https://github.com/kgr1115/ai-pipeline-scaffold) (archived).
 - **[agentic-job-pipeline](https://github.com/kgr1115/agentic-job-pipeline)** — predecessor to *understudy*. Same orchestrator/subagent shape; two branches over the same file-based state machine.
 
 ---
