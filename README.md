@@ -32,7 +32,7 @@ Built around four invariants the load path enforces in code: snapshot-pinned lin
 
 ## Other portfolio work
 
-- **[ai-pipeline-scaffold](https://github.com/kgr1115/ai-pipeline-scaffold)** — researcher → architect → implementer → tester → publisher pipeline for Claude Code projects, with scope gates, binary-signal handoffs, and safety rails (personal-data guard, bounded retry loops, explicit model routing per agent). Includes a `/begin` bootstrap that spawns new projects as paired private/public repos.
+- **[project-generator](https://github.com/kgr1115/project-generator)** — bootstrap-and-brief tool for Claude Code projects. Deep interview that scaffolds new repos (single or paired private/public) and writes a tailored `CLAUDE.md`, instead of leaving the placeholders most pipeline scaffolds ship with. Successor to [ai-pipeline-scaffold](https://github.com/kgr1115/ai-pipeline-scaffold) (archived) — agent profiles + skills are vendored in.
 - **[mlb-market-models](https://github.com/kgr1115/mlb-market-models)** — walk-forward backtest framework over MLB prediction markets. 14,531 gated picks · honest +/− ROI per market (Totals +1.43%, Moneyline −1.37%, Run Line −1.86% — losers published, not buried). Bayesian shrinkage, isotonic calibration (40-bin PAVA), fractional-Kelly sizing with correlated-leg deduplication. Research framework, not a product.
 - **[agentic-job-pipeline](https://github.com/kgr1115/agentic-job-pipeline)** — predecessor to *understudy*. Same orchestrator/subagent shape; two branches over the same file-based state machine.
 
